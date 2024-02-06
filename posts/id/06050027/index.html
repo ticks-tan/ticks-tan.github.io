@@ -1,0 +1,746 @@
+<!doctype html><html lang=zh-CN><head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#"><meta charset=UTF-8><meta name=generator content="Hugo 0.122.0"><meta name=theme-color content="#16171d"><meta name=color-scheme content="light dark"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=format-detection content="telephone=no, date=no, address=no, email=no"><meta http-equiv=Cache-Control content="no-transform"><meta http-equiv=Cache-Control content="no-siteapp"><title>排序算法总结 | Ticks的博客</title>
+<link rel=stylesheet href=/css/meme.min.dba91f7e262d8059594b4738a28c5fd3028294f757a939226b34e4e5eab4867e.css><script src=/js/meme.min.e46abe484398824efc70edec3126437916974df592d7c395b44f8f60e0f57e9d.js></script><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=stylesheet href=https://cdn.staticfile.org/lxgw-wenkai-screen-webfont/1.6.0/style.css media=print onload='this.media="all"'><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&amp;family=Roboto+Mono:wght@400;500;700&amp;family=Source+Code+Pro:wght@400;500;700&amp;family=Tilt+Neon&amp;display=swap" media=print onload='this.media="all"'><noscript><link rel=stylesheet href=#ZgotmplZ></noscript><meta name=author content="Ticks"><meta name=description content="一文看懂排序算法，附赠代码实现哟~"><link rel="shortcut icon" href=/favicon.ico type=image/x-icon><link rel=mask-icon href=/icons/safari-pinned-tab.svg color=#2a6df4><link rel=apple-touch-icon sizes=180x180 href=/icons/apple-touch-icon.png><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-title content="Ticks的博客"><meta name=apple-mobile-web-app-status-bar-style content="black"><meta name=mobile-web-app-capable content="yes"><meta name=application-name content="Ticks的博客"><meta name=msapplication-starturl content="../../../"><meta name=msapplication-TileColor content="#fff"><meta name=msapplication-TileImage content="../../../icons/mstile-150x150.png"><link rel=manifest href=/manifest.json><link rel=canonical href=https://blog.ticks.cc/posts/id/06050027/><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","datePublished":"2023-05-07T00:00:00+00:00","dateModified":"2024-02-06T05:46:33+00:00","url":"https://blog.ticks.cc/posts/id/06050027/","headline":"排序算法总结","description":"一文看懂排序算法，附赠代码实现哟~","inLanguage":"zh-CN","articleSection":"posts","wordCount":5037,"image":"https://blog.ticks.cc/icons/apple-touch-icon.png","author":{"@type":"Person","description":"Nothing can do ಥ_ಥ","email":"ticks.cc@gmail.com","image":"https://blog.ticks.cc/icons/apple-touch-icon.png","url":"https://blog.ticks.cc","name":"Ticks"},"license":"[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)","publisher":{"@type":"Organization","name":"Ticks的博客","logo":{"@type":"ImageObject","url":"https://blog.ticks.cc/icons/apple-touch-icon.png"},"url":"https://blog.ticks.cc/"},"mainEntityOfPage":{"@type":"WebSite","@id":"https://blog.ticks.cc/"}}</script><meta name=twitter:card content="summary"><meta name=twitter:site content="@ticks07"><meta name=twitter:creator content="@ticks007"><meta property="og:title" content="排序算法总结"><meta property="og:description" content="一文看懂排序算法，附赠代码实现哟~"><meta property="og:url" content="https://blog.ticks.cc/posts/id/06050027/"><meta property="og:site_name" content="Ticks的博客"><meta property="og:locale" content="zh"><meta property="og:image" content="https://blog.ticks.cc/icons/apple-touch-icon.png"><meta property="og:type" content="article"><meta property="article:published_time" content="2023-05-07T00:00:00+00:00"><meta property="article:modified_time" content="2024-02-06T05:46:33+00:00"><meta property="article:section" content="posts"></head><body><div class=container><header class=header><div class=header-wrapper><div class="header-inner single"><div class=site-brand><a href=/ class=brand>Ticks的博客</a></div><nav class=nav><ul class=menu id=menu><li class="menu-item active"><a href=/posts/><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon archive"><path d="M32 448c0 17.7 14.3 32 32 32h384c17.7.0 32-14.3 32-32V160H32v288zm160-212c0-6.6 5.4-12 12-12h104c6.6.0 12 5.4 12 12v8c0 6.6-5.4 12-12 12H204c-6.6.0-12-5.4-12-12v-8zM480 32H32C14.3 32 0 46.3.0 64v48c0 8.8 7.2 16 16 16h480c8.8.0 16-7.2 16-16V64c0-17.7-14.3-32-32-32z"/></svg><span class=menu-item-name>文章</span></a></li><li class=menu-item><a href=/tags/><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="icon tags"><path d="M497.941 225.941 286.059 14.059A48 48 0 00252.118.0H48C21.49.0.0 21.49.0 48v204.118a48 48 0 0014.059 33.941l211.882 211.882c18.744 18.745 49.136 18.746 67.882.0l204.118-204.118c18.745-18.745 18.745-49.137.0-67.882zM112 160c-26.51.0-48-21.49-48-48s21.49-48 48-48 48 21.49 48 48-21.49 48-48 48zm513.941 133.823L421.823 497.941c-18.745 18.745-49.137 18.745-67.882.0l-.36-.36L527.64 323.522c16.999-16.999 26.36-39.6 26.36-63.64s-9.362-46.641-26.36-63.64L331.397.0h48.721a48 48 0 0133.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137.0 67.882z"/></svg><span class=menu-item-name>标签</span></a></li><li class=menu-item><a href=/about/><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" class="icon user-circle"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6.0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7.0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4.0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9s28-2.7 40.9-6.9c2.3-.7 4.7-1.1 7.1-1.1 42.9.0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z"/></svg><span class=menu-item-name>关于</span></a></li><li class=menu-item><a href=/nav/><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon link"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96.0-59.27-59.26-59.27-155.7.0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757.0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037.0 01-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482.0 0120.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96.0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454.0 0020.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037.0 00-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639.0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg><span class=menu-item-name>导航</span></a></li><li class=menu-item><a id=theme-switcher href=#><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon theme-icon-light"><path d="M193.2 104.5 242 7a18 18 0 0128 0l48.8 97.5L422.2 70A18 18 0 01442 89.8l-34.5 103.4L505 242a18 18 0 010 28l-97.5 48.8L442 422.2A18 18 0 01422.2 442l-103.4-34.5L270 505a18 18 0 01-28 0l-48.8-97.5L89.8 442A18 18 0 0170 422.2l34.5-103.4-97.5-48.8a18 18 0 010-28l97.5-48.8L70 89.8A18 18 0 0189.8 70zM256 128a128 128 0 10.01.0M256 160a96 96 0 10.01.0"/></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon theme-icon-dark"><path d="M27 412A256 256 0 10181 5a11.5 11.5.0 00-5 20A201.5 201.5.0 0142 399a11.5 11.5.0 00-15 13"/></svg></a></li></ul></nav></div></div><input type=checkbox id=nav-toggle aria-hidden=true>
+<label for=nav-toggle class=nav-toggle></label>
+<label for=nav-toggle class=nav-curtain></label></header><main class="main single" id=main><div class=main-inner><article class="content post h-entry" data-align=justify data-type=posts data-toc-num=true><h1 class="post-title p-name">排序算法总结</h1><div class="post-description p-summary">一文看懂排序算法，附赠代码实现哟~</div><div class=post-meta><time datetime=2023-05-07T00:00:00+00:00 class="post-meta-item published dt-published"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon post-meta-icon"><path d="M148 288h-40c-6.6.0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6.0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6.0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5.0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6.0 12 5.4 12 12v52h48c26.5.0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3.0 6-2.7 6-6z"/></svg>&nbsp;2023-5-7</time>
+<time datetime=2024-02-06T05:46:33+00:00 class="post-meta-item modified dt-updated"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon post-meta-icon"><path d="M4e2 64h-48V12c0-6.627-5.373-12-12-12h-40c-6.627.0-12 5.373-12 12v52H160V12c0-6.627-5.373-12-12-12h-40c-6.627.0-12 5.373-12 12v52H48C21.49 64 0 85.49.0 112v352c0 26.51 21.49 48 48 48h352c26.51.0 48-21.49 48-48V112c0-26.51-21.49-48-48-48zm-6 4e2H54a6 6 0 01-6-6V160h352v298a6 6 0 01-6 6zm-52.849-200.65L198.842 404.519c-4.705 4.667-12.303 4.637-16.971-.068l-75.091-75.699c-4.667-4.705-4.637-12.303.068-16.971l22.719-22.536c4.705-4.667 12.303-4.637 16.97.069l44.104 44.461 111.072-110.181c4.705-4.667 12.303-4.637 16.971.068l22.536 22.718c4.667 4.705 4.636 12.303-.069 16.97z"/></svg>&nbsp;2024-2-6</time>
+<span class="post-meta-item category"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon post-meta-icon"><path d="M464 128H272l-54.63-54.63c-6-6-14.14-9.37-22.63-9.37H48C21.49 64 0 85.49.0 112v288c0 26.51 21.49 48 48 48h416c26.51.0 48-21.49 48-48V176c0-26.51-21.49-48-48-48zm0 272H48V112h140.12l54.63 54.63c6 6 14.14 9.37 22.63 9.37H464v224z"/></svg>&nbsp;<a href=/posts/ class="category-link p-category">Posts</a></span>
+<span class="post-meta-item wordcount"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon post-meta-icon"><path d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3.0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9.0l60.1 60.1c18.8 18.7 18.8 49.1.0 67.9zM284.2 99.8 21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3.0-17l-111-111c-4.8-4.7-12.4-4.7-17.1.0zM124.1 339.9c-5.5-5.5-5.5-14.3.0-19.8l154-154c5.5-5.5 14.3-5.5 19.8.0s5.5 14.3.0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8.0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"/></svg>&nbsp;5037</span></div><nav class=contents><h2 id=contents class=contents-title>目录</h2><ol class=toc><li><a id=contents:选择排序 href=#选择排序>选择排序</a></li><li><a id=contents:冒泡排序 href=#冒泡排序>冒泡排序</a></li><li><a id=contents:插入排序 href=#插入排序>插入排序</a></li><li><a id=contents:归并排序 href=#归并排序>归并排序</a></li><li><a id=contents:桶排序 href=#桶排序>桶排序</a></li><li><a id=contents:计数排序 href=#计数排序>计数排序</a></li><li><a id=contents:基数排序 href=#基数排序>基数排序</a></li><li><a id=contents:快速排序 href=#快速排序>快速排序</a></li><li><a id=contents:希尔排序 href=#希尔排序>希尔排序</a></li><li><a id=contents:堆排序 href=#堆排序>堆排序</a></li></ol></nav><div class="post-body e-content"><div class="notice notice-warning"><div class=notice-title><svg xmlns="http://www.w3.org/2000/svg" class="icon notice-icon" viewBox="0 0 576 512"><path d="M570 440c18 32-5 72-42 72H48c-37 0-60-40-42-72L246 24c19-32 65-32 84 0l240 416zm-282-86a46 46 0 100 92 46 46 0 000-92zm-44-165 8 136c0 6 5 11 12 11h48c7 0 12-5 12-11l8-136c0-7-5-13-12-13h-64c-7 0-12 6-12 13z"/></svg></div><p>阅读须知：为简化实现，本文 C++代码排序用数据为 int 类型，且排序规模不大。</p></div><h2 id=选择排序><a href=#选择排序 class=anchor-link><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96.0-59.27-59.26-59.27-155.7.0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757.0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037.0 01-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482.0 0120.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96.0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454.0 0020.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037.0 00-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639.0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href=#contents:选择排序 class=headings>选择排序</a></h2><p><strong>算法思路</strong> ：[0, n) 区间内元素查找最小的元素并与最开始元素进行交换，再遍历 [1, n) 内元素最小值，与 1 处元素交换，依次缩小区间，直到全部元素有序。</p><p><strong>C++代码实现</strong> ：</p><div class=highlight><div class=chroma><div class=table-container><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=kt>void</span> <span class=nf>SelectSort</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&amp;</span> <span class=n>vec</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;SelectSort Before: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=k>auto</span> <span class=n>len</span> <span class=o>=</span> <span class=n>vec</span><span class=p>.</span><span class=n>size</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>len</span><span class=p>;</span> <span class=o>++</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kt>int</span> <span class=n>min</span> <span class=o>=</span> <span class=n>i</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=n>i</span> <span class=o>+</span> <span class=mi>1</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>len</span><span class=p>;</span> <span class=o>++</span><span class=n>j</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=p>(</span><span class=n>vec</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>&lt;</span> <span class=n>vec</span><span class=p>[</span><span class=n>min</span><span class=p>])</span> <span class=p>{</span> <span class=n>min</span> <span class=o>=</span> <span class=n>j</span><span class=p>;</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=n>std</span><span class=o>::</span><span class=n>swap</span><span class=p>(</span><span class=n>vec</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>vec</span><span class=p>[</span><span class=n>min</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>        <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;SelectSort: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></div><p><strong>时间复杂度分析</strong> ：</p><ul><li>i = 0 时，内层循环 j 循环 n - 1 次</li><li>i = 1 时，内层循环 j 循环 n - 2 次</li><li>i = 2 时，内层循环 j 循环 n - 3 次</li><li>. . .</li><li>i = n -2 时，内层循环 1 次</li><li>循环次数为 $1 + ... + (n - 1) = \frac{(n-1)<em>(n-1+1)}{2} = \frac{n</em>(n-1)}{2}$</li></ul><p>故时间复杂度为 <code>O(n^2)</code> 。</p><p><strong>空间复杂度分析</strong> ：只使用了 i 、j、len 作为临时变量，故为 <code>O(1)</code>。</p><h2 id=冒泡排序><a href=#冒泡排序 class=anchor-link><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96.0-59.27-59.26-59.27-155.7.0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757.0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037.0 01-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482.0 0120.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96.0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454.0 0020.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037.0 00-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639.0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href=#contents:冒泡排序 class=headings>冒泡排序</a></h2><p><strong>算法思路</strong> ：[0, n) 内元素进行相邻比较交换，将较大元素放到较小元素后面，一次遍历后最大的元素到了最后，之后再继续 [0, n-1) 区间内元素，直到区间排序完成，大的元素向后冒，故称冒泡排序。</p><p><strong>C++代码实现</strong> ：</p><div class=highlight><div class=chroma><div class=table-container><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=kt>void</span> <span class=nf>MubbleSort</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&amp;</span> <span class=n>vec</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;MubbleSort Before: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=k>auto</span> <span class=n>len</span> <span class=o>=</span> <span class=n>vec</span><span class=p>.</span><span class=n>size</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 添加标志进行优化
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>bool</span> <span class=n>flag</span> <span class=o>=</span> <span class=nb>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kt>signed</span> <span class=kt>long</span> <span class=n>i</span> <span class=o>=</span> <span class=n>len</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&gt;</span> <span class=o>-</span><span class=mi>1</span><span class=p>;</span> <span class=o>--</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>flag</span> <span class=o>=</span> <span class=nb>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>i</span><span class=p>;</span> <span class=o>++</span><span class=n>j</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=p>(</span><span class=n>vec</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>&gt;</span> <span class=n>vec</span><span class=p>[</span><span class=n>j</span> <span class=o>+</span> <span class=mi>1</span><span class=p>])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>std</span><span class=o>::</span><span class=n>swap</span><span class=p>(</span><span class=n>vec</span><span class=p>[</span><span class=n>j</span><span class=p>],</span> <span class=n>vec</span><span class=p>[</span><span class=n>j</span> <span class=o>+</span> <span class=mi>1</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>                <span class=c1>// 发生了交换
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>flag</span> <span class=o>=</span> <span class=nb>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>        <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;BubbleSort: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>        <span class=k>if</span> <span class=p>(</span><span class=n>flag</span><span class=p>)</span> <span class=p>{</span> <span class=k>break</span><span class=p>;</span> <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></div><p><strong>时间复杂度分析</strong> ：</p><ul><li>i = n - 1 时，内层 j 循环 n - 1 次</li><li>...</li><li>i = 1 时，内层循环 1 次</li><li>一共循环 $\frac{n*(n-1)}{2}$ 次</li></ul><p>故时间复杂度为 <code>O(n^2)</code> ，使用标志位优化，再序列已经有序后退出外层循环，可减少循环次数。</p><p><strong>空间复杂度分析</strong> ：只使用了循环计数和标志位，为 <code>O(1)</code> 。</p><h2 id=插入排序><a href=#插入排序 class=anchor-link><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96.0-59.27-59.26-59.27-155.7.0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757.0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037.0 01-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482.0 0120.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96.0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454.0 0020.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037.0 00-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639.0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href=#contents:插入排序 class=headings>插入排序</a></h2><p><strong>算法思路</strong> ：[0, n) 序列内元素，从 1 开始，依次向前查找已排序好的集合，找到当前元素合适的位置插入，比较过程中便同时进行了元素的后移操作（取出待排序元素后出现空位），类似打扑克牌时排好手中的牌。</p><p><strong>C++代码实现</strong> ：</p><div class=highlight><div class=chroma><div class=table-container><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=kt>void</span> <span class=nf>InsertSort</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&amp;</span> <span class=n>vec</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;InsertSort Before: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=kt>int</span> <span class=n>len</span> <span class=o>=</span> <span class=n>vec</span><span class=p>.</span><span class=n>size</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>len</span><span class=p>;</span> <span class=o>++</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kt>int</span> <span class=n>v</span> <span class=o>=</span> <span class=n>vec</span><span class=p>[</span><span class=n>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>        <span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=n>i</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 循环向前比较
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>while</span> <span class=p>(</span><span class=n>j</span> <span class=o>&gt;=</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=p>(</span><span class=n>vec</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>&gt;</span> <span class=n>v</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>vec</span><span class=p>[</span><span class=n>j</span> <span class=o>+</span> <span class=mi>1</span><span class=p>]</span> <span class=o>=</span> <span class=n>vec</span><span class=p>[</span><span class=n>j</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>                <span class=o>--</span><span class=n>j</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=n>vec</span><span class=p>[</span><span class=n>j</span> <span class=o>+</span> <span class=mi>1</span><span class=p>]</span> <span class=o>=</span> <span class=n>v</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>        <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;InsertSort: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></div><p><strong>时间复杂度分析</strong> ：</p><ul><li>最好情况下序列已经有序，外层循环遍历一次，时间复杂度 <code>O(n)</code></li><li>最坏情况下序列有序，但是时方向有序，内层循环每次需要执行 i 次，时间复杂度 $\frac{n*(n+1)}{2}$ = <code>O(n^2)</code></li></ul><p><strong>空间复杂度分析</strong> ：只有循环变量和临时变量，为 <code>O(1)</code></p><h2 id=归并排序><a href=#归并排序 class=anchor-link><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96.0-59.27-59.26-59.27-155.7.0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757.0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037.0 01-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482.0 0120.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96.0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454.0 0020.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037.0 00-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639.0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href=#contents:归并排序 class=headings>归并排序</a></h2><p><strong>算法思路</strong> ：对于两个已经有序的序列，可以通过指针遍历得到一个大的有序序列，而归并排序就是递归的将数组划分为不同的序列，直到最小序列，最后将子序列进行合并得到大的完整序列，即 <strong>递归+合并操作</strong> ，故称 归并排序。</p><p><strong>C++代码实现</strong> ：</p><div class=highlight><div class=chroma><div class=table-container><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=c1>// 递归实现，也可使用栈代替递归
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kt>void</span> <span class=nf>MergeSort</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&amp;</span> <span class=n>vec</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>start</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>end</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 合并 [start,mid] 与 (mid, end] 两个区间序列
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>auto</span> <span class=n>Merge</span> <span class=o>=</span>
+</span></span><span class=line><span class=cl>        <span class=p>[](</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&amp;</span> <span class=n>vec</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>start</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>mid</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>end</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span> <span class=n>tmp</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=n>tmp</span><span class=p>.</span><span class=n>reserve</span><span class=p>(</span><span class=n>end</span> <span class=o>-</span> <span class=n>start</span> <span class=o>+</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=n>size_t</span> <span class=n>l</span> <span class=o>=</span> <span class=n>start</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=n>size_t</span> <span class=n>r</span> <span class=o>=</span> <span class=n>mid</span> <span class=o>+</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=k>while</span> <span class=p>(</span><span class=n>l</span> <span class=o>&lt;=</span> <span class=n>mid</span> <span class=o>&amp;&amp;</span> <span class=n>r</span> <span class=o>&lt;=</span> <span class=n>end</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>vec</span><span class=p>[</span><span class=n>l</span><span class=p>]</span> <span class=o>&lt;=</span> <span class=n>vec</span><span class=p>[</span><span class=n>r</span><span class=p>])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>tmp</span><span class=p>.</span><span class=n>push_back</span><span class=p>(</span><span class=n>vec</span><span class=p>[</span><span class=n>l</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>                    <span class=n>l</span> <span class=o>+=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>tmp</span><span class=p>.</span><span class=n>push_back</span><span class=p>(</span><span class=n>vec</span><span class=p>[</span><span class=n>r</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>                    <span class=n>r</span> <span class=o>+=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=c1>// 合并剩余序列
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=k>if</span> <span class=p>(</span><span class=n>l</span> <span class=o>&lt;=</span> <span class=n>mid</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>tmp</span><span class=p>.</span><span class=n>insert</span><span class=p>(</span><span class=n>tmp</span><span class=p>.</span><span class=n>end</span><span class=p>(),</span>
+</span></span><span class=line><span class=cl>                           <span class=n>vec</span><span class=p>.</span><span class=n>begin</span><span class=p>()</span> <span class=o>+</span> <span class=n>l</span><span class=p>,</span> <span class=n>vec</span><span class=p>.</span><span class=n>begin</span><span class=p>()</span> <span class=o>+</span> <span class=n>mid</span> <span class=o>+</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>tmp</span><span class=p>.</span><span class=n>insert</span><span class=p>(</span><span class=n>tmp</span><span class=p>.</span><span class=n>end</span><span class=p>(),</span>
+</span></span><span class=line><span class=cl>                           <span class=n>vec</span><span class=p>.</span><span class=n>begin</span><span class=p>()</span> <span class=o>+</span> <span class=n>r</span><span class=p>,</span> <span class=n>vec</span><span class=p>.</span><span class=n>begin</span><span class=p>()</span> <span class=o>+</span> <span class=n>end</span> <span class=o>+</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>            <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;Merge ({:&gt;2}, {:&gt;2}, {:&gt;2}): &#34;</span><span class=n>_fmt</span><span class=p>(</span><span class=n>start</span><span class=p>,</span> <span class=n>mid</span><span class=p>,</span> <span class=n>end</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>            <span class=n>PrintArray</span><span class=p>(</span><span class=n>tmp</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>            <span class=c1>// 写入到原序列
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=n>start</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=n>end</span><span class=p>;</span> <span class=o>++</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>vec</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>=</span> <span class=n>tmp</span><span class=p>[</span><span class=n>i</span> <span class=o>-</span> <span class=n>start</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>start</span> <span class=o>&gt;=</span> <span class=n>end</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=n>size_t</span> <span class=n>mid</span> <span class=o>=</span> <span class=p>(</span><span class=n>start</span> <span class=o>+</span> <span class=n>end</span><span class=p>)</span> <span class=o>/</span> <span class=mi>2</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 递归左边
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>MergeSort</span><span class=p>(</span><span class=n>vec</span><span class=p>,</span> <span class=n>start</span><span class=p>,</span> <span class=n>mid</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 递归右边序列
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>MergeSort</span><span class=p>(</span><span class=n>vec</span><span class=p>,</span> <span class=n>mid</span> <span class=o>+</span> <span class=mi>1</span><span class=p>,</span> <span class=n>end</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 合并序列
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>Merge</span><span class=p>(</span><span class=n>vec</span><span class=p>,</span> <span class=n>start</span><span class=p>,</span> <span class=n>mid</span><span class=p>,</span> <span class=n>end</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>inline</span> <span class=kt>void</span> <span class=nf>MergeSort</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&amp;</span> <span class=n>vec</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;MergeSort Before: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=k>if</span> <span class=p>(</span><span class=n>vec</span><span class=p>.</span><span class=n>size</span><span class=p>()</span> <span class=o>&gt;</span> <span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>MergeSort</span><span class=p>(</span><span class=n>vec</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=n>vec</span><span class=p>.</span><span class=n>size</span><span class=p>()</span> <span class=o>-</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;MergeSort After: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></div><p><strong>时间复杂度分析</strong> ：</p><ul><li>对于归并操作，可以在 n = n1 + n2 时间内完成两个有序序列合并</li><li>整个算法在于这个归并操作进行了多少次，使用递归的对半平分操作，即 $2^x = N$ ，则 $x = log^{N}_{2}$</li></ul><p>故整个算法时间复杂度为 <code>O(n*logn)</code> 。</p><p><strong>空间复杂度分析</strong> ： 归并操作需要使用额外的辅组序列，且序列长度为 n = (n1 + n2) ，故空间复杂度为 <code>O(n)</code> 。</p><p><strong>算法优化</strong> ：时间复杂度已经是基于比较的排序算法中最优了，但是可以优化空间复杂度，比如使用固定的序列并通过参数传递，避免频繁的内存分配与释放。</p><h2 id=桶排序><a href=#桶排序 class=anchor-link><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96.0-59.27-59.26-59.27-155.7.0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757.0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037.0 01-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482.0 0120.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96.0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454.0 0020.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037.0 00-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639.0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href=#contents:桶排序 class=headings>桶排序</a></h2><p><strong>算法思路</strong> ：对于 [0, n) 序列，创建若干个有序的桶 t1, t2, ... tn ，其中 桶 t(n+1) 中元素比 桶 t(n) 中元素大，再分别对每个桶中元素进行选择排序或者其他排序，使其有序，最后依次取出 t1 ... tn 中元素即排序完成。</p><p><strong>C++代码实现</strong> ：</p><div class=highlight><div class=chroma><div class=table-container><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=c1>// oneBucketCount : 每个桶最大元素数量
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kt>void</span> <span class=nf>BucketSort</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&amp;</span> <span class=n>vec</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>oneBucketCount</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;BucketSort Before: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=c1>// 获取最大最小值，方便划分桶范围
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>int</span> <span class=n>minVal</span> <span class=o>=</span> <span class=n>arrayMinOrMax</span><span class=p>(</span><span class=n>vec</span><span class=p>,</span> <span class=nb>true</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=kt>int</span> <span class=n>maxVal</span> <span class=o>=</span> <span class=n>arrayMinOrMax</span><span class=p>(</span><span class=n>vec</span><span class=p>,</span> <span class=nb>false</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 桶数量
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>int</span> <span class=n>bucketCount</span> <span class=o>=</span> <span class=p>(</span><span class=n>vec</span><span class=p>.</span><span class=n>size</span><span class=p>()</span> <span class=o>/</span> <span class=n>oneBucketCount</span><span class=p>)</span> <span class=o>+</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 对于 [minVal, maxVal] 内元素，每个桶间元素间隔
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>int</span> <span class=n>perBucket</span> <span class=o>=</span> <span class=p>(</span><span class=n>maxVal</span> <span class=o>-</span> <span class=n>minVal</span> <span class=o>+</span> <span class=n>bucketCount</span><span class=p>)</span> <span class=o>/</span> <span class=n>bucketCount</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&gt;</span> <span class=n>buckets</span><span class=p>(</span><span class=n>bucketCount</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 遍历序列，放入对应桶中
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=nl>val</span> <span class=p>:</span> <span class=n>vec</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>buckets</span><span class=p>[(</span><span class=n>val</span> <span class=o>-</span> <span class=n>minVal</span><span class=p>)</span> <span class=o>/</span> <span class=n>perBucket</span><span class=p>].</span><span class=n>push_back</span><span class=p>(</span><span class=n>val</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 遍历每个桶，进行桶内排序(选择排序或其他排序)，再写入原序列中
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>size_t</span> <span class=n>index</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=k>auto</span><span class=o>&amp;</span> <span class=nl>bucket</span> <span class=p>:</span> <span class=n>buckets</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>SelectSort</span><span class=p>(</span><span class=n>bucket</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>        <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;Bucket: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>PrintArray</span><span class=p>(</span><span class=n>bucket</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>        <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=nl>v</span> <span class=p>:</span> <span class=n>bucket</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>vec</span><span class=p>[</span><span class=n>index</span><span class=o>++</span><span class=p>]</span> <span class=o>=</span> <span class=n>v</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;BucketSort After: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></div><p><strong>时间复杂度分析</strong> ：</p><ul><li>最坏情况下就是所有元素都被分配到了一个桶里面，这时如果桶内采用选择、冒泡等排序算法时间复杂度会退化为 <code>O(n^2)</code> ，所以桶内可以采用归并排序，这样最坏情况时间复杂度也有 <code>O(n*logn)</code> 。</li></ul><p><strong>空间复杂度分析</strong> ：需要把所有元素都放入桶内，所以空间复杂度为 <code>O(n)</code> 。</p><p>桶排序对数据要求较高，适用于特定范围内分布较均匀的类型排序，所以一般用得较少。</p><h2 id=计数排序><a href=#计数排序 class=anchor-link><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96.0-59.27-59.26-59.27-155.7.0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757.0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037.0 01-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482.0 0120.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96.0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454.0 0020.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037.0 00-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639.0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href=#contents:计数排序 class=headings>计数排序</a></h2><p><strong>算法思路</strong> ：对于 [0, n) 范围内序列 Nums，找出最大元素 maxVal，最小元素为 0 ，创建一个 长度为 maxVal + 1 的数组 Count，遍历原序列，将 Count 中对应位置元素 + 1，即统计对应数字出现的次数。最后再遍历 Count 数组，根据出现的次数再依次写入原序列，即完成排序。因为是统计数字出现次数，故称 计数排序。</p><p><strong>C++代码实现</strong> ：</p><div class=highlight><div class=chroma><div class=table-container><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=c1>// 只考虑了正整数的情况
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kt>void</span> <span class=nf>CountingSort</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&amp;</span> <span class=n>vec</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;CountingSort Before: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=kt>int</span> <span class=n>maxLen</span> <span class=o>=</span> <span class=n>arrayMinOrMax</span><span class=p>(</span><span class=n>vec</span><span class=p>,</span> <span class=nb>false</span><span class=p>)</span> <span class=o>+</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 找出最大元素并构建计数表（可使用哈希表代替）
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;</span> <span class=n>table</span><span class=p>(</span><span class=n>maxLen</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 遍历序列计数
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=nl>v</span> <span class=p>:</span> <span class=n>vec</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>table</span><span class=p>[</span><span class=n>v</span><span class=p>]</span> <span class=o>+=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 根据计数重新赋值原序列
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>size_t</span> <span class=n>idx</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>maxLen</span><span class=p>;</span> <span class=o>++</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>while</span> <span class=p>(</span><span class=n>table</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=n>vec</span><span class=p>[</span><span class=n>idx</span><span class=o>++</span><span class=p>]</span> <span class=o>=</span> <span class=n>i</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=n>table</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>-=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;CountingSort After: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></div><p><strong>时间复杂度分析</strong> ：</p><ul><li>计数排序将数字计数放入哈希表，插入和查询都是 <code>O(1)</code> ，将所有数字插入再取出，总时间复杂度为 <code>O(n)</code> 。</li></ul><p><strong>空间复杂度分析</strong> ：若序列中都为整数且为 [a, b] ，则空间复杂度为 <code>O(b - a + 1) = O(m)</code> 。</p><p>虽然计数排序时间复杂度非常好，但是对数据要求太高，如果数字太大则无法很好的完成，如果有负数需要进行偏移处理，如果为非整数需要考虑精度等问题。不过在特定数据类型排序时还是可以常用的，不仅时间复杂度很低而且算法简单。</p><h2 id=基数排序><a href=#基数排序 class=anchor-link><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96.0-59.27-59.26-59.27-155.7.0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757.0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037.0 01-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482.0 0120.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96.0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454.0 0020.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037.0 00-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639.0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href=#contents:基数排序 class=headings>基数排序</a></h2><p><strong>算法思路</strong> ：借鉴了桶排序思路，不过不用再进行桶内排序。基数排序首先分配 10 个桶，对应数字 0 - 9 ，对于序列 [0, n) 内元素，遍历取个位，分别放入个位数对应的桶中，依次将桶内元素取出，再重复上面步骤，不过此时取的是十位，以此类推，直到全部数位取完，完成排序。（如果一个数所有位数都比另一个数大，自然就比它大了，当然负数、小数等除外）。</p><p><strong>C++代码实现</strong> ：</p><div class=highlight><div class=chroma><div class=table-container><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=c1>// 只考虑了正整数情况
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kt>void</span> <span class=nf>RadixSort</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&amp;</span> <span class=n>vec</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;RadixSort Before: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=c1>// 底数，用去取特定数位值
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>long</span> <span class=n>base</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 取最大值，用于判断是否应该终止算法
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>int</span> <span class=n>maxVal</span> <span class=o>=</span> <span class=n>arrayMinOrMax</span><span class=p>(</span><span class=n>vec</span><span class=p>,</span> <span class=nb>false</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>while</span> <span class=p>(</span><span class=n>base</span> <span class=o>&lt;</span> <span class=n>maxVal</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 创建十个桶
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&gt;</span> <span class=n>buckets</span><span class=p>(</span><span class=mi>10</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=nl>val</span> <span class=p>:</span> <span class=n>vec</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=c1>// 插入到对应位的桶
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>buckets</span><span class=p>[(</span><span class=n>val</span> <span class=o>/</span> <span class=n>base</span><span class=p>)</span> <span class=o>%</span> <span class=mi>10</span><span class=p>].</span><span class=n>push_back</span><span class=p>(</span><span class=n>val</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=n>size_t</span> <span class=n>idx</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=p>(</span><span class=k>auto</span><span class=o>&amp;</span> <span class=nl>bucket</span> <span class=p>:</span> <span class=n>buckets</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=nl>v</span> <span class=p>:</span> <span class=n>bucket</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=n>vec</span><span class=p>[</span><span class=n>idx</span><span class=o>++</span><span class=p>]</span> <span class=o>=</span> <span class=n>v</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>        <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;RadixSort: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>        <span class=n>base</span> <span class=o>*=</span> <span class=mi>10</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;RadixSort After: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></div><p><strong>时间复杂度分析</strong> ：</p><ul><li>也与数字的数据范围有关，如果其中最大数字位数为 m ，则外层取进位需要循环 m 次，内层循环 n 次，总时间复杂度为 <code>O(m*n)</code> 。</li></ul><p><strong>空间复杂度分析</strong> ：总共需要十个桶，每个桶元素数量加起来为 n ，故为 <code>O(n)</code> 。</p><p>基数排序是对计数排序的优化，可以更好的处理更大的数字，不过仍然对数据类型要求较高。</p><h2 id=快速排序><a href=#快速排序 class=anchor-link><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96.0-59.27-59.26-59.27-155.7.0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757.0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037.0 01-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482.0 0120.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96.0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454.0 0020.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037.0 00-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639.0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href=#contents:快速排序 class=headings>快速排序</a></h2><p><strong>算法思路</strong> ：首先选择一个基准数（一般为序列第一个数），然后遍历一次序列将比基准数小的的元素放到左边，比基准数大或等于的放到右边，将基准数与最后一次出现的小于基准数与基准数交换，这样一次遍历后基准数左边的比基准数小，右边的比基准数大或相等。然后分别处理基准数左边的序列和右边序列，最终完成排序。</p><p><strong>C++代码实现</strong> ：</p><div class=highlight><div class=chroma><div class=table-container><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=c1>// 递归实现，可用栈迭代代替
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=kt>void</span> <span class=nf>QuickSort</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&amp;</span> <span class=n>vec</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>start</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>end</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 遍历给定范围序列，并区分基准值左边和右边
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>auto</span> <span class=n>quickBase</span> <span class=o>=</span> <span class=p>[](</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&amp;</span> <span class=n>vec</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>start</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>end</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 随机快速排序优化
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=c1>// size_t rdm_idx = random(start, end);
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=c1>// std::swap(vec[start], vec[rdm_idx]);
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>size_t</span> <span class=n>base</span> <span class=o>=</span> <span class=n>start</span><span class=p>;</span>  <span class=c1>// 基准值
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>size_t</span> <span class=n>j</span> <span class=o>=</span> <span class=n>start</span> <span class=o>+</span> <span class=mi>1</span><span class=p>;</span> <span class=c1>// 记录最后的比base小的元素位置
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>for</span> <span class=p>(</span><span class=n>size_t</span> <span class=n>i</span> <span class=o>=</span> <span class=n>start</span> <span class=o>+</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=n>end</span><span class=p>;</span> <span class=o>++</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=p>(</span><span class=n>vec</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>&lt;=</span> <span class=n>vec</span><span class=p>[</span><span class=n>base</span><span class=p>])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=c1>// 遇到更小的，交换到前面
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>std</span><span class=o>::</span><span class=n>swap</span><span class=p>(</span><span class=n>vec</span><span class=p>[</span><span class=n>j</span><span class=p>],</span> <span class=n>vec</span><span class=p>[</span><span class=n>i</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>                <span class=c1>// 此时j处元素比base处小了，向后移动一个，方便下次交换
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>j</span> <span class=o>+=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 遍历完成，将基准值与最后出现的比基准值小的元素交换
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=c1>// j - 1是因为我们进行了 j += 1操作
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>std</span><span class=o>::</span><span class=n>swap</span><span class=p>(</span><span class=n>vec</span><span class=p>[</span><span class=n>base</span><span class=p>],</span> <span class=n>vec</span><span class=p>[</span><span class=n>j</span> <span class=o>-</span> <span class=mi>1</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>        <span class=n>base</span> <span class=o>=</span> <span class=n>j</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>        <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;QuickSort priv: {} : &#34;</span><span class=n>_fmt</span><span class=p>(</span><span class=n>base</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>        <span class=k>return</span> <span class=n>base</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>start</span> <span class=o>&gt;=</span> <span class=n>end</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 遍历后基准值位置
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>size_t</span> <span class=n>base</span> <span class=o>=</span> <span class=n>quickBase</span><span class=p>(</span><span class=n>vec</span><span class=p>,</span> <span class=n>start</span><span class=p>,</span> <span class=n>end</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 处理前半部分
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>QuickSort</span><span class=p>(</span><span class=n>vec</span><span class=p>,</span> <span class=n>start</span><span class=p>,</span> <span class=n>base</span> <span class=o>-</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 处理后半部分
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>QuickSort</span><span class=p>(</span><span class=n>vec</span><span class=p>,</span> <span class=n>base</span> <span class=o>+</span> <span class=mi>1</span><span class=p>,</span> <span class=n>end</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=kr>inline</span> <span class=kt>void</span> <span class=nf>QuickSort</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&amp;</span> <span class=n>vec</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;QucikSort Before: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=k>if</span> <span class=p>(</span><span class=n>vec</span><span class=p>.</span><span class=n>size</span><span class=p>()</span> <span class=o>&gt;</span> <span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>QuickSort</span><span class=p>(</span><span class=n>vec</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=n>vec</span><span class=p>.</span><span class=n>size</span><span class=p>()</span> <span class=o>-</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;QucikSort After: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></div><p><strong>时间复杂度分析</strong> ：</p><ul><li>最坏情况下是序列已经有序，此时每次遍历都不会实际交换元素，时间复杂度退化为 <code>O(n^2)</code></li><li>最优情况，区间划分很均匀，递归树深度为 <code>logn</code> ，时间复杂度为 <code>O(n*logn)</code></li></ul><p><strong>空间复杂度分析</strong> ：主要消耗为递归栈内存消耗，最好情况递归深度为 <code>logn</code> ，空间复杂度为 <code>O(logn)</code> ，最坏情况需要进行 n - 1 次递归，空间复杂度 <code>O(n)</code>。</p><p>快速排序面对特定范围数值排序时可能没有桶排序、计数排序、基数排序块，但是好在它的适用面广，适合多种场景。</p><p><strong>优化方案</strong> ：</p><p>普通快速排序缺点在于最坏情况时间复杂度为 <code>O(n^2)</code> ，可以通过 <strong>随机快速排序</strong> 进行优化，优化方法很简单，就是在选择基准数时使用随机数代替，获取到随机下标后与第一个元素交换，后面就跟普通快速排序一样了。虽然改动很小，但是却可以优化掉最坏情况下时间复杂度。</p><h2 id=希尔排序><a href=#希尔排序 class=anchor-link><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96.0-59.27-59.26-59.27-155.7.0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757.0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037.0 01-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482.0 0120.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96.0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454.0 0020.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037.0 00-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639.0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href=#contents:希尔排序 class=headings>希尔排序</a></h2><p><strong>算法思想</strong> ：希尔排序是对 <strong>插入排序</strong> 的优化，对于 [0, n) 序列内元素， 首先间隔 <code>gap</code> 将序列划分为 <code>gap</code> 组，每组内分别进行插入排序，再将 <code>gap / x</code> ，. . . ，<code>gap</code> 为 1 ，所有元素变为 1 组，. . . ，直到 <code>gap</code> 为 0 ，排序完成。插入排序在基本有序的情况下排序很快，希尔排序利用增量，前期比较个数少，最后一趟元素基本有序，所以很快。</p><p><strong>C++代码实现</strong> ：</p><div class=highlight><div class=chroma><div class=table-container><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=kt>void</span> <span class=nf>ShellSort</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&amp;</span> <span class=n>vec</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;ShellSort Before: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=c1>// 计算增量，这里使用 gaps/3 计算
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>size_t</span> <span class=n>len</span> <span class=o>=</span> <span class=n>vec</span><span class=p>.</span><span class=n>size</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=kt>long</span> <span class=n>gaps</span> <span class=o>=</span> <span class=p>(</span><span class=n>len</span> <span class=o>/</span> <span class=mi>3</span><span class=p>)</span> <span class=o>*</span> <span class=mi>2</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 依次处理增量，增量为1为最后一趟
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>while</span> <span class=p>(</span><span class=n>gaps</span> <span class=o>&gt;</span> <span class=mi>0</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 对于每个增量，分别进行插入排序
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>for</span> <span class=p>(</span><span class=kt>long</span> <span class=n>i</span> <span class=o>=</span> <span class=n>gaps</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;</span> <span class=n>len</span><span class=p>;</span> <span class=o>++</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=kt>int</span> <span class=n>val</span> <span class=o>=</span> <span class=n>vec</span><span class=p>[</span><span class=n>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>            <span class=kt>long</span> <span class=n>j</span> <span class=o>=</span> <span class=n>i</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=k>while</span> <span class=p>(</span><span class=n>j</span> <span class=o>&gt;=</span> <span class=n>gaps</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=p>(</span><span class=n>vec</span><span class=p>[</span><span class=n>j</span> <span class=o>-</span> <span class=n>gaps</span><span class=p>]</span> <span class=o>&gt;</span> <span class=n>val</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>vec</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>vec</span><span class=p>[</span><span class=n>j</span> <span class=o>-</span> <span class=n>gaps</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=n>j</span> <span class=o>-=</span> <span class=n>gaps</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=n>vec</span><span class=p>[</span><span class=n>j</span><span class=p>]</span> <span class=o>=</span> <span class=n>val</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>        <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;ShellSort gaps({}): &#34;</span><span class=n>_fmt</span><span class=p>(</span><span class=n>gaps</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>        <span class=n>gaps</span> <span class=o>/=</span> <span class=mi>3</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;ShellSort After: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></div><p><strong>时间复杂度分析</strong> ：希尔排序时间复杂度跟增量的选择密切相关，比如 Sedgewick 提出的增量序列最坏情况有 <code>O(4/3*n)</code> 时间复杂度，平均 <code>O(7/6*n)</code> 时间复杂度，而 Hibbard 的增量序列最坏有 <code>O(3/2*n)</code> ，代码实现中为了简便使用的 <code>1/3</code> 递减增量，在数据量较小时具有较好的时间复杂度，具体使用什么增量序列可根据实际情况来定。</p><p><strong>空间复杂度分析</strong> ：希尔排序跟插入排序一样使用原地交换，复杂度为 <code>O(1)</code> 。</p><h2 id=堆排序><a href=#堆排序 class=anchor-link><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon anchor-icon"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96.0-59.27-59.26-59.27-155.7.0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757.0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037.0 01-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482.0 0120.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96.0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454.0 0020.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037.0 00-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639.0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"/></svg></a><a href=#contents:堆排序 class=headings>堆排序</a></h2><p><strong>算法思路</strong> ：堆排序利用了小（大）顶堆的堆顶元素具有最小（大）的特性进行排序，首先将 [0, n) 序列构造成一个堆，然后将堆顶元素（也就是数组最开始元素）与数组最后元素交换，同时维护好 [0, n- 1) 序列成为新堆（堆顶元素下沉操作），依次交换首尾元素完成排序。</p><blockquote><p>堆是一种特殊的完全二叉树，大顶堆的父节点元素不小于子节点元素，而完全二叉树具有的一个很好的性质是：<strong>如果父节点下标为 n (从 0 开始的话), 则左右子节点下标分别为 ((n + 1) _ 2 - 1) 与 ((n+1) _ 2)，如果子节点下标为 n ，则父节点下标为 (n - 1) / 2</strong> ，利用这个性质可以很方便使用数组完成堆的构建。</p></blockquote><p><strong>C++代码实现</strong> ：</p><div class=highlight><div class=chroma><div class=table-container><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=kt>void</span> <span class=nf>HeapSort</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&amp;</span> <span class=n>vec</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;HeapSort Before: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=c1>// 堆顶元素不断下沉
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>auto</span> <span class=n>MaxHeapTopDown</span> <span class=o>=</span>
+</span></span><span class=line><span class=cl>        <span class=p>[](</span><span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>int</span><span class=o>&gt;&amp;</span> <span class=n>heap</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>root</span><span class=p>,</span> <span class=n>size_t</span> <span class=n>end</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=c1>// 计算左子节点
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>size_t</span> <span class=n>child</span> <span class=o>=</span> <span class=p>(</span><span class=n>root</span> <span class=o>+</span> <span class=mi>1</span><span class=p>)</span> <span class=o>*</span> <span class=mi>2</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>            <span class=c1>// 将堆顶元素不断下沉到合适位置
+</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=k>while</span> <span class=p>(</span><span class=n>child</span> <span class=o>&lt;=</span> <span class=n>end</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=c1>// 右子节点比左子节点大
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=k>if</span> <span class=p>(</span><span class=n>child</span> <span class=o>+</span> <span class=mi>1</span> <span class=o>&lt;=</span> <span class=n>end</span> <span class=o>&amp;&amp;</span> <span class=n>heap</span><span class=p>[</span><span class=n>child</span> <span class=o>+</span> <span class=mi>1</span><span class=p>]</span> <span class=o>&gt;</span> <span class=n>heap</span><span class=p>[</span><span class=n>child</span><span class=p>])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>child</span> <span class=o>+=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>                <span class=c1>// 子节点比父节点大
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=k>if</span> <span class=p>(</span><span class=n>heap</span><span class=p>[</span><span class=n>child</span><span class=p>]</span> <span class=o>&gt;</span> <span class=n>heap</span><span class=p>[</span><span class=n>root</span><span class=p>])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=n>std</span><span class=o>::</span><span class=n>swap</span><span class=p>(</span><span class=n>heap</span><span class=p>[</span><span class=n>child</span><span class=p>],</span> <span class=n>heap</span><span class=p>[</span><span class=n>root</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>                    <span class=n>root</span> <span class=o>=</span> <span class=n>child</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                    <span class=n>child</span> <span class=o>=</span> <span class=p>(</span><span class=n>child</span> <span class=o>+</span> <span class=mi>1</span><span class=p>)</span> <span class=o>*</span> <span class=mi>2</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                    <span class=k>break</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>            <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>};</span>
+</span></span><span class=line><span class=cl>    <span class=n>size_t</span> <span class=n>root</span> <span class=o>=</span> <span class=mi>0</span><span class=p>,</span> <span class=n>len</span> <span class=o>=</span> <span class=n>vec</span><span class=p>.</span><span class=n>size</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 构建大顶堆
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>for</span> <span class=p>(</span><span class=kt>long</span> <span class=n>i</span> <span class=o>=</span> <span class=p>(</span><span class=n>len</span> <span class=o>-</span> <span class=mi>1</span><span class=p>)</span> <span class=o>/</span> <span class=mi>2</span><span class=p>;</span> <span class=n>i</span> <span class=o>&gt;=</span> <span class=mi>0</span><span class=p>;</span> <span class=o>--</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>MaxHeapTopDown</span><span class=p>(</span><span class=n>vec</span><span class=p>,</span> <span class=n>i</span><span class=p>,</span> <span class=n>len</span> <span class=o>-</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;MaxHeap: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=c1>// 不断交换堆顶与最后元素
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>for</span> <span class=p>(</span><span class=kt>long</span> <span class=n>i</span> <span class=o>=</span> <span class=n>len</span> <span class=o>-</span> <span class=mi>1</span><span class=p>;</span> <span class=n>i</span> <span class=o>&gt;</span> <span class=n>root</span><span class=p>;</span> <span class=o>--</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=n>std</span><span class=o>::</span><span class=n>swap</span><span class=p>(</span><span class=n>vec</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>vec</span><span class=p>[</span><span class=n>root</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// 维护好剩余序列组成的大顶堆
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>MaxHeapTopDown</span><span class=p>(</span><span class=n>vec</span><span class=p>,</span> <span class=n>root</span><span class=p>,</span> <span class=n>i</span> <span class=o>-</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>        <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;HeapSort [{}-{}]: &#34;</span><span class=n>_fmt</span><span class=p>(</span><span class=n>root</span><span class=p>,</span> <span class=n>i</span> <span class=o>-</span> <span class=mi>1</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cp>#if __DEBUG__
+</span></span></span><span class=line><span class=cl><span class=cp></span>    <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;HeapSort After: &#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=n>PrintArray</span><span class=p>(</span><span class=n>vec</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=p>}</span>
+</span></span></code></pre></td></tr></table></div></div></div><p><strong>时间复杂度分析</strong> ：</p><ul><li>堆是一个完全二叉树，树深度为 logn ，每次维护大顶堆最多操作 logn 次，则总时间复杂度为 <code>O(n*logn)</code></li></ul><p><strong>空间复杂度</strong> ：没有使用额外空间，故为 <code>O(1)</code> 。</p><hr><p>以上便是所有常见的排序算法了，完整的代码实现与测试用例请查看 <a href=https://github.com/ticks-tan/DStudy/tree/main/src/algorithm target=_blank rel=noopener>Github 代码 </a>。</p></div><ul class=post-copyright><li class="copyright-item author"><span class=copyright-item-text>作者</span>：<a href=https://blog.ticks.cc class="p-author h-card" target=_blank rel=noopener>Ticks</a></li><li class="copyright-item link"><span class=copyright-item-text>链接</span>：<a href=/posts/id/06050027/ target=_blank rel=noopener>https://blog.ticks.cc/posts/id/06050027/</a></li><li class="copyright-item license"><span class=copyright-item-text>许可</span>：<a href=https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh target=_blank rel=noopener>CC BY-NC-SA 4.0</a></li></ul></article><div class=updated-badge-container><span title="Updated @ 2024-02-06 05:46:33 UTC" style=cursor:help><svg xmlns="http://www.w3.org/2000/svg" width="130" height="20" class="updated-badge"><linearGradient id="b" x2="0" y2="100%"><stop offset="0" stop-color="#bbb" stop-opacity=".1"/><stop offset="1" stop-opacity=".1"/></linearGradient><clipPath id="a"><rect width="130" height="20" rx="3" fill="#fff"/></clipPath><g clip-path="url(#a)"><path class="updated-badge-left" d="M0 0h55v20H0z"/><path class="updated-badge-right" d="M55 0h75v20H55z"/><path fill="url(#b)" d="M0 0h130v20H0z"/></g><g fill="#fff" text-anchor="middle" font-size="110"><text x="285" y="150" fill="#010101" fill-opacity=".3" textLength="450" transform="scale(.1)">updated</text><text x="285" y="140" textLength="450" transform="scale(.1)">updated</text><text x="915" y="150" fill="#010101" fill-opacity=".3" textLength="650" transform="scale(.1)">2024-02-06</text><text x="915" y="140" textLength="650" transform="scale(.1)">2024-02-06</text></g></svg></span></div><div class=post-share><div class=share-items><div class="share-item twitter"><a href="https://twitter.com/share?url=https://blog.ticks.cc/posts/id/06050027/&amp;text=%e6%8e%92%e5%ba%8f%e7%ae%97%e6%b3%95%e6%80%bb%e7%bb%93&amp;hashtags=%e7%ac%94%e8%ae%b0,%e7%ae%97%e6%b3%95,&amp;via=ticks07" title=分享到「Twitter」 target=_blank rel=noopener><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon twitter-icon"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645.0 138.72-105.583 298.558-298.558 298.558-59.452.0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055.0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421.0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391.0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04.0-57.828 46.782-104.934 104.934-104.934 30.213.0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg></a></div><div class="share-item telegram"><a href="https://t.me/share/url?url=https://blog.ticks.cc/posts/id/06050027/&amp;text=%e6%8e%92%e5%ba%8f%e7%ae%97%e6%b3%95%e6%80%bb%e7%bb%93" title=分享到「Telegram」 target=_blank rel=noopener><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" class="icon telegram-icon"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm121.8 169.9-40.7 191.8c-3 13.6-11.1 16.9-22.4 10.5l-62-45.7-29.9 28.8c-3.3 3.3-6.1 6.1-12.5 6.1l4.4-63.1 114.9-103.8c5-4.4-1.1-6.9-7.7-2.5l-142 89.4-61.2-19.1c-13.3-4.2-13.6-13.3 2.8-19.7l239.1-92.2c11.1-4 20.8 2.7 17.2 19.5z"/></svg></a></div><div class="share-item qq"><a href="https://connect.qq.com/widget/shareqq/index.html?url=https://blog.ticks.cc/posts/id/06050027/&amp;title=%e6%8e%92%e5%ba%8f%e7%ae%97%e6%b3%95%e6%80%bb%e7%bb%93&amp;summary=%e4%b8%80%e6%96%87%e7%9c%8b%e6%87%82%e6%8e%92%e5%ba%8f%e7%ae%97%e6%b3%95%ef%bc%8c%e9%99%84%e8%b5%a0%e4%bb%a3%e7%a0%81%e5%ae%9e%e7%8e%b0%e5%93%9f~&amp;pics=https://blog.ticks.cc/icons/apple-touch-icon.png&amp;site=Ticks%e7%9a%84%e5%8d%9a%e5%ae%a2" title=分享到「QQ」 target=_blank rel=noopener><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon qq-icon"><path d="M433.754 420.445c-11.526 1.393-44.86-52.741-44.86-52.741.0 31.345-16.136 72.247-51.051 101.786 16.842 5.192 54.843 19.167 45.803 34.421-7.316 12.343-125.51 7.881-159.632 4.037-34.122 3.844-152.316 8.306-159.632-4.037-9.045-15.25 28.918-29.214 45.783-34.415-34.92-29.539-51.059-70.445-51.059-101.792.0.0-33.334 54.134-44.859 52.741-5.37-.65-12.424-29.644 9.347-99.704 10.261-33.024 21.995-60.478 40.144-105.779C60.683 98.063 108.982.006 224 0c113.737.006 163.156 96.133 160.264 214.963 18.118 45.223 29.912 72.85 40.144 105.778 21.768 70.06 14.716 99.053 9.346 99.704z"/></svg></a></div></div></div><div class=related-posts><h2 class=related-title>相关文章：<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon related-icon"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6.0-12-5.4-12-12v-92h-92c-6.6.0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6.0 12 5.4 12 12v92h92c6.6.0 12 5.4 12 12v56z"/></svg></h2><ul class=related-list><li class=related-item><a href=/posts/id/6131519/ class=related-link>Git rebase使用</a></li><li class=related-item><a href=/posts/id/382040/ class=related-link>8086汇编快速入门笔记</a></li><li class=related-item><a href=/posts/id/381659/ class=related-link>C++设计模式笔记，单例模式</a></li></ul></div><div class=post-tags><a href=/tags/%E7%AC%94%E8%AE%B0/ rel=tag class=post-tags-link><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon tag-icon"><path d="M0 252.118V48C0 21.49 21.49.0 48 0h204.118a48 48 0 0133.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137.0 67.882L293.823 497.941c-18.745 18.745-49.137 18.745-67.882.0L14.059 286.059A48 48 0 010 252.118zM112 64c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48z"/></svg>笔记</a>
+<a href=/tags/%E7%AE%97%E6%B3%95/ rel=tag class=post-tags-link><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon tag-icon"><path d="M0 252.118V48C0 21.49 21.49.0 48 0h204.118a48 48 0 0133.941 14.059l211.882 211.882c18.745 18.745 18.745 49.137.0 67.882L293.823 497.941c-18.745 18.745-49.137 18.745-67.882.0L14.059 286.059A48 48 0 010 252.118zM112 64c-26.51.0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48z"/></svg>算法</a></div><ul class=post-nav><li class=post-nav-prev><a href=/posts/id/6101908/ rel=prev>&lt; 探索C++对象模型</a></li><li class=post-nav-next><a href=/posts/id/4021507/ rel=next>X86 C++内联汇编 ></a></li></ul></div></main><div id=back-to-top class=back-to-top><a href=#><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon arrow-up"><path d="M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6.0-33.9L207 39c9.4-9.4 24.6-9.4 33.9.0l194.3 194.3c9.4 9.4 9.4 24.6.0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3.0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z"/></svg></a></div><footer id=footer class=footer><div class=footer-inner><div class=site-info>©&nbsp;2023–2024&nbsp;<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon footer-icon"><path d="M462.3 62.6C407.5 15.9 326 24.3 275.7 76.2L256 96.5l-19.7-20.3C186.1 24.3 104.5 15.9 49.7 62.6c-62.8 53.6-66.1 149.8-9.9 207.9l193.5 199.8c12.5 12.9 32.8 12.9 45.3.0l193.5-199.8c56.3-58.1 53-154.3-9.8-207.9z"/></svg>&nbsp;Ticks</div><div class=powered-by>Powered by <a href=https://github.com/gohugoio/hugo target=_blank rel=noopener>Hugo</a> | Theme is <a href=https://github.com/reuixiy/hugo-theme-meme target=_blank rel=noopener>MemE</a></div></div></footer></div><script>"serviceWorker"in navigator&&window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js")})</script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css><script>if(typeof renderMathInElement=="undefined"){const e=e=>{const t=document.createElement("script");t.defer=!0,t.crossOrigin="anonymous",Object.keys(e).forEach(n=>{t[n]=e[n]}),document.body.appendChild(t)};e({src:"https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js",onload:()=>{e({src:"https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/mhchem.min.js",onload:()=>{e({src:"https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js",onload:()=>{renderKaTex()}})}})}})}else renderKaTex();function renderKaTex(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"\\[",right:"\\]",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1}]})}</script><script src=https://cdn.jsdelivr.net/npm/medium-zoom@latest/dist/medium-zoom.min.js></script><script>let imgNodes=document.querySelectorAll("div.post-body img");imgNodes=Array.from(imgNodes).filter(e=>e.parentNode.tagName!=="A"),mediumZoom(imgNodes,{background:"hsla(var(--color-bg-h), var(--color-bg-s), var(--color-bg-l), 0.95)"})</script><script src=https://cdn.jsdelivr.net/npm/instant.page@5.1.0/instantpage.min.js type=module defer></script></body></html>
